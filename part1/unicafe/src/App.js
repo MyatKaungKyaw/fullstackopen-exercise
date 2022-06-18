@@ -24,6 +24,15 @@ const Button = (props) => (
 )
 
 const Statistics = (props) => {
+  if(props.good === 0 && props.neutral ===0 && props.bad===0){
+    return(
+      <>
+        <Header level={'h2'} text={'statistics'}/>
+        <p>No feedback given</p>
+      </>
+    )
+  }
+
   const all = props.good + props.neutral + props.bad || 0
   const positive = (props.good/all)*100 || 0
   const average = (props.good - props.bad) / all || 0 
