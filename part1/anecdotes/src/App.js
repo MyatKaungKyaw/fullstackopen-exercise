@@ -18,15 +18,17 @@ const App = () => {
   ]
 
   const getRandomSelected = () => Math.floor(Math.random() * anecdotes.length)
+
   const [selected, setSelected] = useState(getRandomSelected)
+  const [points,setPoints]=useState({})
   
   const getRandomAncdotes = () => setSelected(getRandomSelected)
 
   return (
     <div>
-      <div>
+      <p>
         {anecdotes[selected]}
-      </div>
+      </p>
       <div>
         <Button 
           handleClick={getRandomAncdotes}
