@@ -7,10 +7,14 @@ const Button = (props) =>(
 )
 
 const Anecdote = (props) =>(
-  <p>
-    {props.ancedote}<br/>
-    has {props.point} votes
-  </p>
+  <>
+    <h1>Anecdote of the day</h1>
+    <p>
+      {props.anecdote}<br/>
+      has {props.point} votes
+    </p>
+
+  </>
 )
 
 const App = () => {
@@ -37,10 +41,26 @@ const App = () => {
     setPoints(cpyPoints)
   }
 
+  const getMostPoint = () => (
+    points.reduce((preVal, crntVal) => preVal > crntVal ? preVal : crntVal)
+  )
+
+  const getMostPointAnecdotes = () => {
+    const point=getMostPoint()
+    if(point === 0){
+      return 'No most voted anecdote yet'
+    }
+
+    return anecdotes[point]
+  }
+
+  console.log(getMostPointAnecdotes())
+
   return (
     <div>
       <Anecdote
-        ancedote={anecdotes[selected]}
+        header={'Anecdote of the day'}
+        anecdote={anecdotes[selected]}
         point={points[selected]}
       />
       <div>
@@ -53,6 +73,12 @@ const App = () => {
           text={'next anecdote'}
         />
       </div>
+      <Anecdote
+        header={'Anecdote with most votes'}
+        anecdote={getMostPointAnecdotes()}
+        point={points[getMostPoint()]}
+      />
+      
     </div>
   )
 }
