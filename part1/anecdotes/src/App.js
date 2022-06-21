@@ -6,6 +6,13 @@ const Button = (props) =>(
   </button>
 )
 
+const Anecdote = (props) =>(
+  <p>
+    {props.ancedote}<br/>
+    has {props.point} votes
+  </p>
+)
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -20,16 +27,27 @@ const App = () => {
   const getRandomSelected = () => Math.floor(Math.random() * anecdotes.length)
 
   const [selected, setSelected] = useState(getRandomSelected)
-  const [points,setPoints]=useState({})
+  const [points,setPoints]=useState(new Array(anecdotes.length).fill(0))
   
   const getRandomAncdotes = () => setSelected(getRandomSelected)
+  
+  const handleVote = () =>{
+    const cpyPoints = {...points}
+    cpyPoints[selected] += 1
+    setPoints(cpyPoints)
+  }
 
   return (
     <div>
-      <p>
-        {anecdotes[selected]}
-      </p>
+      <Anecdote
+        ancedote={anecdotes[selected]}
+        point={points[selected]}
+      />
       <div>
+        <Button
+          handleClick={handleVote}
+          text={'vote'}
+        />
         <Button 
           handleClick={getRandomAncdotes}
           text={'next anecdote'}
