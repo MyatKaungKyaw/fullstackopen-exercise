@@ -8,7 +8,7 @@ const Button = (props) =>(
 
 const Anecdote = (props) =>(
   <>
-    <h1>Anecdote of the day</h1>
+    <h1>{props.header}</h1>
     <p>
       {props.anecdote}<br/>
       has {props.point} votes
@@ -33,28 +33,34 @@ const App = () => {
   const [selected, setSelected] = useState(getRandomSelected)
   const [points,setPoints]=useState(new Array(anecdotes.length).fill(0))
   
-  const getRandomAncdotes = () => setSelected(getRandomSelected)
+  const getRandomAncdotes = () => {
+    let randomSelected = getRandomSelected()
+    while(selected === randomSelected){
+      randomSelected = getRandomSelected()
+    }
+    setSelected(randomSelected)
+  }
   
   const handleVote = () =>{
-    const cpyPoints = {...points}
+    const cpyPoints = [...points]
     cpyPoints[selected] += 1
     setPoints(cpyPoints)
   }
 
-  const getMostPoint = () => (
-    points.reduce((preVal, crntVal) => preVal > crntVal ? preVal : crntVal)
+  const getMostPointIndex = () => (
+    points.reduce((preVal, crntVal, index) => preVal[1] > crntVal ? preVal : [index,crntVal],[-1,-1])[0]
   )
 
   const getMostPointAnecdotes = () => {
-    const point=getMostPoint()
-    if(point === 0){
+    const index=getMostPointIndex()
+    if(points[index] === 0){
       return 'No most voted anecdote yet'
     }
-
-    return anecdotes[point]
+    return anecdotes[index]
   }
 
-  console.log(getMostPointAnecdotes())
+  console.log(getMostPointIndex())
+
 
   return (
     <div>
@@ -76,9 +82,8 @@ const App = () => {
       <Anecdote
         header={'Anecdote with most votes'}
         anecdote={getMostPointAnecdotes()}
-        point={points[getMostPoint()]}
+        point={points[getMostPointIndex()]}
       />
-      
     </div>
   )
 }
