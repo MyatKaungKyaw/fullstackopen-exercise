@@ -24,7 +24,7 @@ const App = () => {
   const totalExercises = course.parts.reduce((pval, cval) =>  pval+cval.exercises ,0);
 
   return (
-    <Course course={course}/>
+    <Course course={course} totalExercises={totalExercises}/>
   );
 }
 
@@ -33,7 +33,7 @@ const Course = (props) =>{
     <>
       <Header course={props.course.name} />
       <Content parts={props.course.parts} />
-      {/* <Total exercises={totalExercises} /> */}
+      <Total exercises={props.totalExercises} />
     </>
   )
 }
