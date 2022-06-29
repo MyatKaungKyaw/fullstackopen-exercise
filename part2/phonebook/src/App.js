@@ -17,7 +17,7 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    setPersons(persons.concat(event.target.value))
+    setPersons(persons.concat({name:newName}))
   }
 
   return (
