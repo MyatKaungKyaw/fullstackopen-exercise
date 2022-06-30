@@ -1,8 +1,36 @@
 import { useState } from 'react'
 
-const Person = (props) => (
+const Filter = (props) => (
+  <input
+    onChange={props.handleChange}
+    value={props.value}
+  />
+)
+
+const PersonForm = (props) => (
+  <form onSubmit={props.onSubmit}>
+    <div>
+      name: <input 
+              onChange={props.handleNameChange} 
+              value={props.newName}
+            />
+    <div></div>
+      number: <input
+                onChange={props.handleNumberChange}
+                value={props.newNumber}
+              />
+    </div>
+    <div>
+      <button type="submit">add</button>
+    </div>
+  </form>
+)
+
+const Persons = (props) => (
   <>
-    <p>{props.person.name} {props.person.number}</p>
+    {props.persons.map(person => (
+      <p key={person.name}>{person.name} {person.number}</p>
+    ))}
   </>
 )
 const App = () => {
