@@ -45,7 +45,9 @@ const App = () => {
     setNewName('')
   }
 
-  // const personsToShow = 
+  const personsToShow = filter.trim() !== '' 
+  ? persons.filter(p => p.name === filter.toLowerCase())
+  : persons
 
   return (
     <div>
@@ -72,7 +74,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => 
+      {personsToShow.map(person => 
         <Person key={person.name} person={person}/>
       )}
     </div>
