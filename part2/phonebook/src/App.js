@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import axios from 'axios'
 
 const Filter = (props) => (
   <>
@@ -46,6 +47,14 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber,setNewNumber]=useState('')
   const [filter, setFilter]=useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        setPersons(response.data)
+      })
+  })
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
