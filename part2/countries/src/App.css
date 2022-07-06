@@ -40,4 +40,13 @@
 .find-countries{
   display: flex;
   flex-direction: row;
+  height:1.2em;
+  align-items: center;
+  padding-top: 0.5em;
+
+}
+
+.country-multi{
+  margin:0;
+  padding:0;
 }

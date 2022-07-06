@@ -12,30 +12,39 @@ const FindCountries = (props) => (
 )
 
 const ShowCountries = (props) => {
-  if (props.countries.length = 0 || props.countries.length > 10) {
+  if (props.countries.length === 0 || props.countries.length > 10) {
     return (
-      < div >
+      <div >
         <p>Too many matches, specify another filter</p>
       </div >
     )
   }
   else if(props.countries.length > 1){
-    <div>
-      {props.countries.map(country => 
-        <p key={country.fifa}>country.name.common</p>
-      )}
-    </div>
+    return(
+      <div>
+        {props.countries.map(country => 
+          <p className={'country-multi'}key={country.fifa}>{country.name.common}</p>
+        )}
+      </div>
+    )
   }
 
-  const country = props.country;
+  const country = props.countries[0];
+
   return(
     <div>
-      <h2>country.name.common</h2>
+      <h2>{country.name.common}</h2>
       <p>
-        capital {country.capital.reduce((pval, cval, index, arr)=> arr.length === index ? pval : `${pval}, ${cval}`)}<br>
+        capital {country.capital.reduce((pval, cval, index, arr)=> arr.length === index ? pval : `${pval}, ${cval}`)}<br/>
         area {country.area}
       </p>
-      <h3>languages</h3>
+      <h3>languages:</h3>
+      <ul>
+        {Object.getOwnPropertyNames(country.languages).map(lan => <li key={lan}>{country.languages[lan]}</li>)}
+      </ul>
+      <div>
+        {country.flags.svg}
+      </div>
     </div>
   )
 }
@@ -56,8 +65,11 @@ const App = () => {
 
   const foundCountries = find === '' 
   ? countries
-  : countries.filter(country => country.name.common.includes(find))
+  : countries.filter(country => country.name.common.toLowerCase().includes(find.toLowerCase()))
 
+  // console.log(countries.reduce((pv,cv) => cv.independent === false ? pv.concat(cv.name.common) : pv,[]));
+
+  console.log('%cApp.js line:64 foundCountries', 'color: #007acc;', foundCountries);
   return (
     <div>
       <FindCountries
