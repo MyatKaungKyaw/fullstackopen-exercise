@@ -19,8 +19,24 @@ const ShowCountries = (props) => {
       </div >
     )
   }
+  else if(props.countries.length > 1){
+    <div>
+      {props.countries.map(country => 
+        <p key={country.fifa}>country.name.common</p>
+      )}
+    </div>
+  }
+
+  const country = props.country;
   return(
-    <div></div>
+    <div>
+      <h2>country.name.common</h2>
+      <p>
+        capital {country.capital.reduce((pval, cval, index, arr)=> arr.length === index ? pval : `${pval}, ${cval}`)}<br>
+        area {country.area}
+      </p>
+      <h3>languages</h3>
+    </div>
   )
 }
 
@@ -35,10 +51,12 @@ const App = () => {
   },[])
 
   const handleFindChange = (event) => {
-    setFind(event.target.value)
+    setFind(event.target.value.toString().trim())
   }
 
-  const foundCountries = countries
+  const foundCountries = find === '' 
+  ? countries
+  : countries.filter(country => country.name.common.includes(find))
 
   return (
     <div>
