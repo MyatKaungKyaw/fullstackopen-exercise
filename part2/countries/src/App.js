@@ -43,11 +43,28 @@ const ShowCountries = (props) => {
         {Object.getOwnPropertyNames(country.languages).map(lan => <li key={lan}>{country.languages[lan]}</li>)}
       </ul>
       <div>
-        <object type="image/svg+xml" data="country.flags.svg" width="5em" height="5em"></object>
+        <object type="image/svg+xml" data={country.flags.svg} width="5em" height="5em"></object>
       </div>
     </div>
   )
 }
+
+const CountryDetail = ({country}) => (
+  <div>
+    <h2>{country.name.common}</h2>
+    <p>
+      capital {country.capital.reduce((pval, cval, index, arr)=> arr.length === index ? pval : `${pval}, ${cval}`)}<br/>
+      area {country.area}
+    </p>
+    <h3>languages:</h3>
+    <ul>
+      {Object.getOwnPropertyNames(country.languages).map(lan => <li key={lan}>{country.languages[lan]}</li>)}
+    </ul>
+    <div>
+      <object type="image/svg+xml" data={country.flags.svg} width="5em" height="5em"></object>
+    </div>
+</div>
+)
 
 const App = () => {
   const [find, setFind] = useState('')
