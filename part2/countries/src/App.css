@@ -54,3 +54,7 @@
 .flag{
   width:18rem;
 }
+
+.mulit-countries{
+  list-style-type: none;
+}

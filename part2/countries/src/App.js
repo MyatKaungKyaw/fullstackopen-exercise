@@ -21,12 +21,15 @@ const ShowCountries = (props) => {
   }
   else if(props.countries.length > 1){
     return(
-      <div>
+      <ul className={'multi-countries'}>
         {props.countries.map(country => 
-          <p className={'country-multi'}key={country.fifa}>{country.name.common}</p>
-          // <button>show</button>
+          <li key={country.fifa}>
+            <p className={'country-multi'}>{country.name.common}</p>
+            <button  onClick={e => props.handleShowCtryOnClick(e, country.fifa)}>show</button>
+            {props.showCtryDetail[country.fifa] === true ? <CountryDetail country={country}/> : null}
+          </li>
         )}
-      </div>
+      </ul>
     )
   }
 
@@ -54,6 +57,7 @@ const CountryDetail = ({country}) => (
 const App = () => {
   const [find, setFind] = useState('')
   const [countries, setCountries] = useState([])
+  const [showCtryDetail, setShowCtryDetail] = useState({})
 
   useEffect(() => {
     axios
@@ -63,6 +67,15 @@ const App = () => {
 
   const handleFindChange = (event) => {
     setFind(event.target.value.toString().trim())
+    setShowCtryDetail({})
+  }
+
+  const handleShowCtryOnClick = (e, fifa) => {
+    const objShowCtry = showCtryDetail.hasOwnProperty(fifa) 
+    ? showCtryDetail
+    : {...showCtryDetail, [fifa] : true}
+
+    setShowCtryDetail(objShowCtry)
   }
 
   const foundCountries = find === '' 
@@ -70,8 +83,8 @@ const App = () => {
   : countries.filter(country => country.name.common.toLowerCase().includes(find.toLowerCase()))
 
   // console.log(countries.reduce((pv,cv) => cv.independent === false ? pv.concat(cv.name.common) : pv,[]));
-
   console.log('%cApp.js line:64 foundCountries', 'color: #007acc;', foundCountries);
+
   return (
     <div>
       <FindCountries
@@ -80,6 +93,8 @@ const App = () => {
       />
       <ShowCountries
         countries={foundCountries}
+        showCtryDetail={showCtryDetail}
+        handleShowCtryOnClick={handleShowCtryOnClick}
       />
     </div>
   )
