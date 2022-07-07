@@ -43,7 +43,7 @@ const ShowCountries = (props) => {
         {Object.getOwnPropertyNames(country.languages).map(lan => <li key={lan}>{country.languages[lan]}</li>)}
       </ul>
       <div>
-        {country.flags.svg}
+        <object type="image/svg+xml" data="country.flags.svg" width="5em" height="5em"></object>
       </div>
     </div>
   )
