@@ -35,13 +35,15 @@ const ShowCountries = (props) => {
 
   const country = props.countries[0];
   return(
-    <CountryDetail country={country}/>
+    <div>
+      <h2>{country.name.common}</h2>
+      <CountryDetail country={country}/>
+    </div>
   )
 }
 
 const CountryDetail = ({country}) => (
-  <div>
-    <h2>{country.name.common}</h2>
+  <>
     <p>
       capital {country.capital.reduce((pval, cval, index, arr)=> arr.length === index ? pval : `${pval}, ${cval}`)}<br/>
       area {country.area}
@@ -51,7 +53,7 @@ const CountryDetail = ({country}) => (
       {Object.getOwnPropertyNames(country.languages).map(lan => <li key={lan}>{country.languages[lan]}</li>)}
     </ul>
     <object type="image/svg+xml" data={country.flags.svg} className={'flag'}>flag</object>
-  </div>
+  </>
 )
 
 const App = () => {
