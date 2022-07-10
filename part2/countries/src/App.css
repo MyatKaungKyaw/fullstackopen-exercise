@@ -58,3 +58,7 @@
 .mulit-countries{
   list-style-type: none;
 }
+
+.weather-image{
+  width: 8rem;
+}
