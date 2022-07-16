@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/presons'
 
 const Filter = (props) => (
   <>
@@ -44,11 +44,10 @@ const App = () => {
   const [filter, setFilter]=useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('%cApp.js line:50 response.data', 'color: #007acc;', response.data);
-        setPersons(response.data)
+    personService.getAll()
+      .then(data => {
+        console.log('%cApp.js line:49 response.data', 'color: #007acc;', data);
+        setPersons(data)
       })
   },[])
 
