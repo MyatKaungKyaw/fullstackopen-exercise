@@ -72,13 +72,18 @@ const App = () => {
       return;
     }
 
-    setPersons(persons.concat({
-      name:newName,
-      number:newNumber,
-      id:persons[persons.length-1].id +1
-    }))
-    setNewName('')
-    setNewNumber('')
+    const person = {
+      name: newName,
+      number: newNumber,
+    }
+
+    personService
+      .add(person)
+      .then(returnPerson => {
+        setPersons(persons.concat(returnPerson))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const personsToShow = filter.trim() !== '' 
