@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import { Filter, PersonForm, Persons } from './components/Person'
 import React from 'react'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null)
 
   const getAllPerson = () => {
     personService.getAll()
@@ -96,6 +98,7 @@ const App = () => {
         value={filter}
       />
       <h3>add a new</h3>
+      <Notification.Info message={message}/>
       <PersonForm
         onSubmit={addPerson}
         name={newName}
