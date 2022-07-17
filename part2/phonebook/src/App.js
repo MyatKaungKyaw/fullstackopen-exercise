@@ -1,75 +1,61 @@
 import { useState, useEffect } from 'react'
-import personService from './services/presons'
-
-const Filter = (props) => (
-  <>
-    filter shown with <input
-      onChange={props.handleChange}
-      value={props.value}
-    />
-  </>
-)
-
-const PersonForm = (props) => (
-  <form onSubmit={props.onSubmit}>
-    <div>
-      name: <input 
-              onChange={props.handleNameChange} 
-              value={props.name}
-            />
-    <div></div>
-      number: <input
-                onChange={props.handleNumberChange}
-                value={props.number}
-              />
-    </div>
-    <div>
-      <button type="submit">add</button>
-    </div>
-  </form>
-)
-
-const Persons = (props) => (
-  <>
-    {props.persons.map(person => (
-      <p key={person.name}>{person.name} {person.number}</p>
-    ))}
-  </>
-)
+import personService from './services/persons'
+import { Filter, PersonForm, Persons } from './components/Person'
+import React from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
-  const [newNumber,setNewNumber]=useState('')
-  const [filter, setFilter]=useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
-  useEffect(() => {
+  const getAllPerson = () => {
     personService.getAll()
       .then(data => {
         console.log('%cApp.js line:49 response.data', 'color: #007acc;', data);
         setPersons(data)
       })
-  },[])
+  }
+
+  useEffect(() => {
+    getAllPerson()
+  }, [])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
-      setNewNumber(event.target.value)
+    setNewNumber(event.target.value)
   }
 
-  const handleFilterChange = (event) =>{
+  const handleFilterChange = (event) => {
     setFilter(event.target.value)
+  }
+
+  const removePerson = person => {
+    if (!window.confirm(`Delete ${person.name} ?`)) return
+
+    personService
+      .remove(person.id)
+      .then(response => {
+        console.log('%cApp.js line:35 response', 'color: #007acc;', response)
+        getAllPerson();
+      })
+      .catch(console.error)
   }
 
   const addPerson = (event) => {
     event.preventDefault()
 
-    const isDuplicate = persons.find(val => val.name === newName)
-    if(isDuplicate) {
-      alert(`${newName} is already added to phonebook`)
-      return;
+    const duplicatePerson = persons.find(val => val.name === newName)
+    if (duplicatePerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        personService.update(duplicatePerson).then(updatePerson => {
+          persons.reduce((pVal, cVal) => cVal.id === updatePerson.id ? pVal.concat(updatePerson) : pVal.concat(cVal),[])
+        })
+      }
+      return
     }
 
     const person = {
@@ -84,11 +70,12 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(console.error)
   }
 
-  const personsToShow = filter.trim() !== '' 
-  ? persons.filter(p => p.name.toLowerCase() === filter.toLowerCase())
-  : persons
+  const personsToShow = filter.trim() !== ''
+    ? persons.filter(p => p.name.toLowerCase() === filter.toLowerCase())
+    : persons
 
   return (
     <div>
@@ -106,7 +93,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow}/>
+      <Persons persons={personsToShow} removePerson={removePerson} />
     </div>
   )
 }
