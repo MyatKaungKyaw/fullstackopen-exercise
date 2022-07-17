@@ -47,20 +47,31 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+    
+    if (newName.trim()==='' || newNumber.trim()==='') return
 
-    const duplicatePerson = persons.find(val => val.name === newName)
-    if (duplicatePerson) {
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        personService.update(duplicatePerson).then(updatePerson => {
-          persons.reduce((pVal, cVal) => cVal.id === updatePerson.id ? pVal.concat(updatePerson) : pVal.concat(cVal),[])
-        })
-      }
-      return
-    }
-
+    setNewName(newName.trim())
+    setNewNumber(newNumber.trim())
+    
     const person = {
       name: newName,
       number: newNumber,
+    }
+
+    const duplicatePerson = persons.find(val => val.name === person.name)
+    if (duplicatePerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        personService
+          .update(duplicatePerson.id, person)
+          .then(updatePerson => {
+            setPersons(persons.reduce((pVal, cVal) => cVal.id === updatePerson.id ? pVal.concat(updatePerson) : pVal.concat(cVal),[]))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(console.error)
+
+      }
+      return
     }
 
     personService
