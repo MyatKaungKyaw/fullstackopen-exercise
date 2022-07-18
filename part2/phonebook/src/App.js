@@ -10,6 +10,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [message, setMessage] = useState(null)
+  const [errMessage, setErrMessage] = useState(null)
 
   const getAllPerson = () => {
     personService.getAll()
@@ -67,12 +68,16 @@ const App = () => {
           .update(duplicatePerson.id, person)
           .then(updatePerson => {
             setPersons(persons.reduce((pVal, cVal) => cVal.id === updatePerson.id ? pVal.concat(updatePerson) : pVal.concat(cVal), []))
-            setNewName('')
-            setNewNumber('')
             showMessage(`${updatePerson.name}'s number was changed to ${updatePerson.number}`)
           })
-          .catch(console.error)
-      }
+          .catch(err => {
+            setPersons(persons.filter(prsn => prsn.id !== duplicatePerson.id))
+            showErrMessage(`Information of ${duplicatePerson.name} has already been removed from server`)
+            console.error('%cApp.js line:76 err : ', 'color: #007acc;', err);
+          })
+        }
+      setNewName('')
+      setNewNumber('')
       return
     }
 
@@ -89,7 +94,12 @@ const App = () => {
 
   const showMessage = message => {
     setMessage(message)
-    setTimeout(() => setMessage(null),3000)
+    setTimeout(() => setMessage(null), 3000)
+  }
+
+  const showErrMessage = message => {
+    setErrMessage(message)
+    setTimeout(() => setErrMessage(null), 3000)
   }
 
   const personsToShow = filter.trim() !== ''
@@ -105,6 +115,7 @@ const App = () => {
       />
       <h3>add a new</h3>
       <Notification.Info message={message} />
+      <Notification.Error message={errMessage} />
       <PersonForm
         onSubmit={addPerson}
         name={newName}
