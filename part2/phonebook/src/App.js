@@ -49,12 +49,12 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    
-    if (newName.trim()==='' || newNumber.trim()==='') return
+
+    if (newName.trim() === '' || newNumber.trim() === '') return
 
     setNewName(newName.trim())
     setNewNumber(newNumber.trim())
-    
+
     const person = {
       name: newName,
       number: newNumber,
@@ -66,12 +66,12 @@ const App = () => {
         personService
           .update(duplicatePerson.id, person)
           .then(updatePerson => {
-            setPersons(persons.reduce((pVal, cVal) => cVal.id === updatePerson.id ? pVal.concat(updatePerson) : pVal.concat(cVal),[]))
+            setPersons(persons.reduce((pVal, cVal) => cVal.id === updatePerson.id ? pVal.concat(updatePerson) : pVal.concat(cVal), []))
             setNewName('')
             setNewNumber('')
+            showMessage(`${updatePerson.name}'s number was changed to ${updatePerson.number}`)
           })
           .catch(console.error)
-
       }
       return
     }
@@ -82,8 +82,14 @@ const App = () => {
         setPersons(persons.concat(returnPerson))
         setNewName('')
         setNewNumber('')
+        showMessage(`Added ${returnPerson.name}`)
       })
       .catch(console.error)
+  }
+
+  const showMessage = message => {
+    setMessage(message)
+    setTimeout(() => setMessage(null),3000)
   }
 
   const personsToShow = filter.trim() !== ''
@@ -98,7 +104,7 @@ const App = () => {
         value={filter}
       />
       <h3>add a new</h3>
-      <Notification.Info message={message}/>
+      <Notification.Info message={message} />
       <PersonForm
         onSubmit={addPerson}
         name={newName}
